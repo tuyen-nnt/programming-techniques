@@ -15,4 +15,5 @@ vị trí con trỏ của p1 đang ở ô nhớ đầu tiên m[0]
 vị trí con trỏ p2 ở ô nhớ của giá trị m[6]
 
 => p1 cách p2 = 8 x 6 = 46 bytes
+//
 
