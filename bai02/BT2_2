@@ -1,0 +1,18 @@
+void main()
+{
+
+double m[100]; m[100];
+double *p1, *p2; *p1, *p2;
+p1 = m;
+p2 = &m[6];
+
+}
+Hãy cho biết p1 cách p2 bao nhiêu byte?
+
+Trả lời:
+Kiểu double chiếm 8 bytes trong 1 ô nhớ trong hệ điều hành 64bit 
+vị trí con trỏ của p1 đang ở ô nhớ đầu tiên m[0]
+vị trí con trỏ p2 ở ô nhớ của giá trị m[6]
+
+=> p1 cách p2 = 8 x 6 = 46 bytes
+

@@ -1,0 +1,28 @@
+{
+	int *x, y;
+	float *z;
+	y = 2;
+	z = &y;
+	*x = *x + y;
+	printf(“%d”, y); 
+
+}
+
+a) Đoạn chương trình trên có lỗi gì?
+Trả lời: 
+Khai báo biến y kiểu dữ liệu là int, z kiểu int 
+//int *x; 
+//int y;
+
+
+b) Hãy thử sửa lại cho đúng.
+Trả lời:
+{
+	int *x; 
+	int y;
+	int *z;
+	y = 2;
+	z = &y;
+	*x = *x + y;
+	printf(“%d”, y); 
+}

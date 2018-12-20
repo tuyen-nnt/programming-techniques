@@ -1,0 +1,3 @@
+/home/thanhtuyen/Kĩ thuật lập trình/bai02/BT2_5/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/thanhtuyen/Kĩ thuật lập trình/bai02/BT2_5/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/thanhtuyen/Kĩ thuật lập trình/bai02/BT2_5/cmake-build-debug/CMakeFiles/BT2_5.dir

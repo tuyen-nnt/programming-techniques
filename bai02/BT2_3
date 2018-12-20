@@ -1,0 +1,25 @@
+Hãy giải thích sự khác nhau giữa 3 hàm sau:
+
+void swap1( void swap1(int x, int y)
+{
+
+	int temp = x; temp = x;
+	x = y;
+	y = temp;
+}
+
+void swap3( void swap3(int *x, int *y)
+{
+
+	int temp = *x; temp = *x;
+	*x = *y;
+	y = temp; *y = temp;
+}
+
+void swap2( void swap2(int &x, int &y)
+{
+
+	int temp = x; temp = x;
+	x = y;
+	y = temp;
+}
