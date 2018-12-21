@@ -1,26 +1,40 @@
 Hãy giải thích sự khác nhau giữa 3 hàm sau:
 
-void swap1( void swap1(int x, int y)
+void swap1(int x, int y)
 {
 
-	int temp = x; temp = x;
+	int temp = x; 
 	x = y;
 	y = temp;
 }
 
-void swap3( void swap3(int *x, int *y)
+void swap2(int &x, int &y)
 {
 
-	int temp = *x; temp = *x;
+	int temp = x; 
+	x = y;
+	y = temp;
+}
+
+void swap3(int *x, int *y)
+{
+
+	int temp = *x; 
 	*x = *y;
-	y = temp; *y = temp;
+	*y = temp; 
 }
 
-void swap2( void swap2(int &x, int &y)
-{
 
-	int temp = x; temp = x;
-	x = y;
-	y = temp;
-}
 //
+
+Trả lời:
+
+1) Hàm swap1: 
+Hàm này lấy giá trị của biến ở hàm gọi trong main và thực hiện hoán đổi 2 giá trị trong hàm void swap1. Tuy nhiên sau khi ra khỏi hàm void swap1, mọi giá trị trở lại như ban đầu vì tham số là tham trị.
+
+2) Hàm swap2:
+Hàm này thực hiện khi có lệnh gọi ở hàm main và được truyền vào tham chiếu tức là 2 biến truyền vào hàm là địa chỉ của x,y và cũng chính là 2 biến x,y ở hàm main. Do đó sau khi ra khỏi hàm, 2 giá trị tham số sẽ bị thay đổi (đổi giá trị cho nhau).
+
+3) Hàm swap3: 
+Hàm này có tham số truyền vào là địa chỉ của 2 biến x,y và tham số sử dụng con trỏ trỏ đến giá trị của 2 biến x,y tại hai địa chỉ của nó. Do đó hàm có thể truy xuất giá trị của 2 biến và làm hoán đổi giá trị của chúng.
+
