@@ -1,0 +1,13 @@
+Mảng nhiều chiều m được khai báo như sau:
+int m[4][6]; 
+Hãy cho biết kiểu địa chỉ của:
+a) m.
+b) m[2].
+c) m[1][3].
+Hãy cho biết câu lệnh truy xuất m[2][4] mà không dùng dấu [ ].
+
+Trả lời:
+
+int (*p)[6] = m
+
+

@@ -1,0 +1,22 @@
+Xét đoạn chương trình C sau:
+void khoiTao(double **p)
+{
+	for (int i = 0; i < 5; i++)
+	*(p + i) = new double[ ) = new double[ i + 1 ];
+
+}
+
+void main()
+{
+
+	double *p[10];
+	khoiTao(p + 3);
+	thuHoi(p); 
+}
+Hãy cho biết:
+a) Ở mỗi dòng trong hàm main
+có bao nhiêu byte được cấp phát.
+b) Sau hàm khoiTao khoiTao, các phần tử
+của mảng p được cấp phát thế nào.
+c) Hàm thuHoi được viết ra sao để
+để không gây rò rỉ bộ nhớ.
