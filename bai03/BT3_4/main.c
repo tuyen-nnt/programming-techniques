@@ -71,7 +71,7 @@ void danhsachgioi(struct HocSinh* hocsinh, int n)
         else
             break;
     }
-
+	free(hocsinh);
 }
 int main() {
     int n = 0;
@@ -85,11 +85,13 @@ int main() {
         n = (int) strtol(buffer, NULL, 10);
     }
 
-    struct HocSinh* hocSinh = nhapds(n);
+    struct HocSinh* hocsinh = nhapds(n);
 
     printf("\n");
 
-    danhsachgioi(hocSinh, n);
+    danhsachgioi(hocsinh, n);
+
+    free(hocsinh);
 
     return 0;
 }
