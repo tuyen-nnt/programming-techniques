@@ -27,8 +27,7 @@ void mangsonguyen(float** matrix, int m, int n, int** intarray, int* k)
         {
             if (matrix[i][j] - lamtron(matrix[i][j]) < e)
             {
-                *intarray[k] = lamtron(matrix[i][j]);
-                *k += 1;
+                (*intarray)[*k++] = lamtron(matrix[i][j]);
             }
         }
     *k += 1;
