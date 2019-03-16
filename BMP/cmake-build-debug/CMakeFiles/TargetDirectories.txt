@@ -1,0 +1,3 @@
+/home/thanhtuyen/Programming-Techniques/BMP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/thanhtuyen/Programming-Techniques/BMP/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/thanhtuyen/Programming-Techniques/BMP/cmake-build-debug/CMakeFiles/BMP.dir
