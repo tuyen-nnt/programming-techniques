@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/thanhtuyen/Programming-Techniques/RandomChar/main.c
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+time.h
+-
+
