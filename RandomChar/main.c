@@ -5,6 +5,9 @@
 
 void RandomStringGenerator(char* code, int codeLength)
 {
+    time_t t;
+    srand((unsigned) time(&t));
+
     char* box = "!@#$%^&*()";
     int boxLength = strlen(box);
 
