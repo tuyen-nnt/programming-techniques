@@ -1,7 +1,9 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/BMP.dir/main.c.o"
+  "CMakeFiles/BMP.dir/main.c.obj"
   "BMP.pdb"
-  "BMP"
+  "BMP.exe"
+  "BMP.exe.manifest"
+  "libBMP.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
