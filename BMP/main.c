@@ -21,8 +21,8 @@ struct BitMapHeader{
 struct DIB
 {
     unsigned char biSize[4];
-    unsigned char biWidth[4];
-    unsigned char biHeight[4];
+    uint32_t biWidth;
+    uint32_t biHeight;
 //so lop mau
     unsigned char biPlanes[2];
 //do sau mau
@@ -34,13 +34,13 @@ struct DIB
     unsigned char biClrImportant[4];
 };
 
-void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif) {
+void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif, struct Color* color) {
 
     if (fp == NULL)
         return;
 
     fseek(fp, 0, SEEK_SET);
-    fread(header, sizeof(struct BitMapHeader), 1, fp);
+    fread(&header, sizeof(struct BitMapHeader), 1, fp);
 
     fseek(fp, sizeof(struct BitMapHeader), 0);
     fread(&bmif,sizeof(struct DIB),1,fp);
@@ -48,8 +48,8 @@ void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif) {
     printf("\n%s",header->bfType);
     printf("\n%s",header->bfSize);
     printf("\n%s",bmif->biSize);
-    printf("\n%s",bmif->biWidth);
-    printf("\n%s",bmif->biHeight);
+    printf("\n%d",bmif->biWidth);
+    printf("\n%d",bmif->biHeight);
 
     if (header->bfType != bmSign)
     {
@@ -74,12 +74,20 @@ struct PixelArray{
 };
 
 
+}
+
+void readPixelArray(FILE* fp, struct BitMapHeader bmhd, struct DIB bmif, struct PixelArray* pixel){
+//read het cac thong so de nhap vao bien pixel
+    if (!fp)
+        return;
+    (*pixel).rowCount = bmif.biHeight;
+    (*pixel).columnCount = bmif.biWidth;
+
+    char paddingCount = (4 - (bmif.biWidth) * (bmif.biBitCount/8) % 4)) % 4;
 
 }
 
-void readPixelArray(FILE* fp, struct BitMapHeader bmhd, struct DIB bmif, struct PixelArray pixel){
 
-}
 
 struct Bitmap {
     struct BitMapHeader header;
@@ -88,21 +96,22 @@ struct Bitmap {
     struct PixelArray pixel;
 };
 
-void readFromFile(FILE* f, struct Bitmap* bmp) {
-
+void readFromFile(struct Bitmap* bmp) {
+    FILE* f = NULL;
     f = fopen("D:\\bitmap.in","r+b");
     if (!f)
         return;
     char* link = NULL;
+    link = (char*) malloc (strlen(link)*sizeof(char));
     scanf("%s", link);
 
     FILE* buffer = NULL;
     buffer = fopen(link, "r+b");
 
-    fread(&bmp->header, sizeof(struct BitMapHeader), 1, buffer);
-    fread(&bmp->bmif, sizeof(struct DIB), 1, buffer);
-    fread(&bmp->bmif, sizeof(struct Color), 1, buffer);
-    fread(&bmp->bmif, sizeof(struct PixelArray), 1, buffer);
+    //fread(&bmp->header, sizeof(struct BitMapHeader), 1, buffer);
+
+    readBmpFile(buffer, &bmp->header, &bmp->bmif, &bmp->color);
+    readPixelArray(buffer, bmp->header, bmp->bmif, &bmp->pixel);
 }
 
 void main() {
@@ -112,9 +121,8 @@ void main() {
 
     struct Bitmap* bmp1;
 
-    readFromFile(fp1, bmp1);
+    readFromFile(bmp1);
 
-    readBmpFile(fbmp1, );
     //fseek(fp,0,SEEK_SET);
 
     FILE* fp2 = NULL;
@@ -128,7 +136,6 @@ void main() {
 
 //Nhap vao 1 con so bat ky tu -100 den 100, chinh do sang toi cua anh
 
-    char paddingCount = (4 - (struct DIB.biWidth) * (struct DIB.biBitCount /8) % 4)) % 4;
 
     fclose(fp1);
     fclose(fp2);
