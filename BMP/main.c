@@ -1,5 +1,14 @@
 #include <stdio.h>
+#define _WIN32_WINNT 0x0500
+#include<windows.h>
+#include <stdint-gcc.h>
+
+#pragma once
+
 #define bmSign 'MB'
+#pragma pack(1)
+
+
 
 struct BitMapHeader{
     char bfType[4];
@@ -8,7 +17,8 @@ struct BitMapHeader{
     unsigned char  bfReserved2[2];
     unsigned char  bfOffBits[4];
 };
-struct BitMapInFo
+
+struct DIB
 {
     unsigned char biSize[4];
     unsigned char biWidth[4];
@@ -24,18 +34,24 @@ struct BitMapInFo
     unsigned char biClrImportant[4];
 };
 
-void readFromFile(FILE* fp, struct BitMapHeader bmhd, struct BitMapInFo bmif){;
+void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif) {
 
-    fread(&bmhd,sizeof(struct BitMapHeader),1,fp);
-    fread(&bmif,sizeof(struct BitMapInFo),1,fp);
+    if (fp == NULL)
+        return;
 
-    printf("\n%s",bmhd.bfType);
-    printf("\n%s",bmhd.bfSize);
-    printf("\n%s",bmif.biSize);
-    printf("\n%s",bmif.biWidth);
-    printf("\n%s",bmif.biHeight);
+    fseek(fp, 0, SEEK_SET);
+    fread(header, sizeof(struct BitMapHeader), 1, fp);
 
-    if (bmhd.bfType != bmSign)
+    fseek(fp, sizeof(struct BitMapHeader), 0);
+    fread(&bmif,sizeof(struct DIB),1,fp);
+
+    printf("\n%s",header->bfType);
+    printf("\n%s",header->bfSize);
+    printf("\n%s",bmif->biSize);
+    printf("\n%s",bmif->biWidth);
+    printf("\n%s",bmif->biHeight);
+
+    if (header->bfType != bmSign)
     {
         printf("Khong phai file bitmap");
     }
@@ -44,21 +60,82 @@ void readFromFile(FILE* fp, struct BitMapHeader bmhd, struct BitMapInFo bmif){;
 }
 
 
-int main() {
-    FILE* fp = NULL;
-    fp = fopen("D:\\bitmap.in","r+b");
 
-    if(!fp){
-        printf("Open file fail ...");
-        return 0;
+struct Color{
+    unsigned char Red;
+    unsigned char Green;
+    unsigned char Blue;
+};
+
+struct PixelArray{
+    struct Color** pixel;
+    uint32_t rowCount;
+    uint32_t columnCount;
+};
+
+
+
+}
+
+void readPixelArray(FILE* fp, struct BitMapHeader bmhd, struct DIB bmif, struct PixelArray pixel){
+
+}
+
+struct Bitmap {
+    struct BitMapHeader header;
+    struct DIB bmif;
+    struct Color color;
+    struct PixelArray pixel;
+};
+
+void readFromFile(FILE* f, struct Bitmap* bmp) {
+
+    f = fopen("D:\\bitmap.in","r+b");
+    if (!f)
+        return;
+    char* link = NULL;
+    scanf("%s", link);
+
+    FILE* buffer = NULL;
+    buffer = fopen(link, "r+b");
+
+    fread(&bmp->header, sizeof(struct BitMapHeader), 1, buffer);
+    fread(&bmp->bmif, sizeof(struct DIB), 1, buffer);
+    fread(&bmp->bmif, sizeof(struct Color), 1, buffer);
+    fread(&bmp->bmif, sizeof(struct PixelArray), 1, buffer);
+}
+
+void main() {
+    FILE* fp1 = NULL;
+
+
+
+    struct Bitmap* bmp1;
+
+    readFromFile(fp1, bmp1);
+
+    readBmpFile(fbmp1, );
+    //fseek(fp,0,SEEK_SET);
+
+    FILE* fp2 = NULL;
+    fp2 = fopen("D:\\bitmap.out","w");
+
+    if(!fp2){
+        printf("Open file 2 fail ...");
+        return;
     }
 
-    readFromFile(fp);
-    //fseek(fp,0,SEEK_SET);
 
 //Nhap vao 1 con so bat ky tu -100 den 100, chinh do sang toi cua anh
 
-    fclose(fp);
+    char paddingCount = (4 - (struct DIB.biWidth) * (struct DIB.biBitCount /8) % 4)) % 4;
+
+    fclose(fp1);
+    fclose(fp2);
     getchar();
-    return 0;
+
+    HWND console = GetConsoleWindow();
+    HDC hdc = GetDC(console);
+
+    return
 }
