@@ -10,15 +10,15 @@
 
 
 
-struct BitMapHeader{
+typedef struct BitMapHeaders{
     char bfType[4];
     unsigned char bfSize[4];
     unsigned char  bfReserved1[2];
     unsigned char  bfReserved2[2];
     unsigned char  bfOffBits[4];
-};
+} BitMapHeader ;
 
-struct DIB
+typedef struct DIB
 {
     unsigned char biSize[4];
     uint32_t biWidth;
@@ -32,17 +32,30 @@ struct DIB
     unsigned char biClrUsed[4];
 //so luong mau chinh yeu trong bang mau sd
     unsigned char biClrImportant[4];
-};
+} Dib;
 
-void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif, struct Color* color) {
+typedef struct Color{
+    unsigned char Red;
+    unsigned char Green;
+    unsigned char Blue;
+} RGB;
+
+typedef struct PixelArrays{
+    struct Color** pixel;
+    uint32_t rowCount;
+    uint32_t columnCount;
+} PixelArray;
+
+
+void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif, RGB* color) {
 
     if (fp == NULL)
         return;
 
     fseek(fp, 0, SEEK_SET);
-    fread(&header, sizeof(struct BitMapHeader), 1, fp);
+    fread(&header, sizeof(BitMapHeader), 1, fp);
 
-    fseek(fp, sizeof(struct BitMapHeader), 0);
+    fseek(fp, sizeof(BitMapHeader), 0);
     fread(&bmif,sizeof(struct DIB),1,fp);
 
     printf("\n%s",header->bfType);
@@ -51,7 +64,7 @@ void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif, struct
     printf("\n%d",bmif->biWidth);
     printf("\n%d",bmif->biHeight);
 
-    if (header->bfType != bmSign)
+    if (header.bfType != bmSign)
     {
         printf("Khong phai file bitmap");
     }
@@ -61,42 +74,26 @@ void readBmpFile(FILE* fp, struct BitMapHeader* header, struct DIB* bmif, struct
 
 
 
-struct Color{
-    unsigned char Red;
-    unsigned char Green;
-    unsigned char Blue;
-};
-
-struct PixelArray{
-    struct Color** pixel;
-    uint32_t rowCount;
-    uint32_t columnCount;
-};
-
-
-}
-
-void readPixelArray(FILE* fp, struct BitMapHeader bmhd, struct DIB bmif, struct PixelArray* pixel){
+void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data){
 //read het cac thong so de nhap vao bien pixel
     if (!fp)
         return;
-    (*pixel).rowCount = bmif.biHeight;
-    (*pixel).columnCount = bmif.biWidth;
-
+    (*data).rowCount = bmif.biHeight;
+    (*data).columnCount = bmif.biWidth;
+    (*data).pixel = (struct Color*) malloc
     char paddingCount = (4 - (bmif.biWidth) * (bmif.biBitCount/8) % 4)) % 4;
 
 }
 
 
+typedef struct Bitmap {
+    BitMapHeader header;
+    Dib bmif;
+    RGB color;
+    PixelArray pixel;
+} BitMap;
 
-struct Bitmap {
-    struct BitMapHeader header;
-    struct DIB bmif;
-    struct Color color;
-    struct PixelArray pixel;
-};
-
-void readFromFile(struct Bitmap* bmp) {
+void readFromFile(BitMap* bmp) {
     FILE* f = NULL;
     f = fopen("D:\\bitmap.in","r+b");
     if (!f)
