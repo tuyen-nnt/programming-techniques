@@ -80,8 +80,8 @@ void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data){
         return;
     (*data).rowCount = bmif.biHeight;
     (*data).columnCount = bmif.biWidth;
-    (*data).pixel = (struct Color*) malloc
-    char paddingCount = (4 - (bmif.biWidth) * (bmif.biBitCount/8) % 4)) % 4;
+    (*data).pixel = (RGB**) malloc (bmif.biHeight*(sizeof(RGB*)));
+    char paddingCount = (4 - (bmif.biWidth) * ((int)bmif.biBitCount/8) % 4) % 4;
 
 }
 
