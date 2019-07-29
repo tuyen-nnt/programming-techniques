@@ -38,7 +38,7 @@ typedef struct Color{
     unsigned char Red;
     unsigned char Green;
     unsigned char Blue;
-} RGB;
+} Rgb;
 
 typedef struct PixelArrays{
     struct Color** pixel;
@@ -47,7 +47,7 @@ typedef struct PixelArrays{
 } PixelArray;
 
 
-void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif, RGB* color) {
+void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif) {
 
     if (fp == NULL)
         return;
@@ -73,13 +73,13 @@ void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif, RGB* color) {
 
 }
 
-void scanBmpPixelLine(FILE* fp, RGB* color, uint32_t lengthColumn){
+void scanBmpPixelLine(FILE* fp, Rgb* color, uint32_t lengthColumn){
     if (!fp)
         return;
 
-    color = (RGB*) malloc (sizeof(RGB)*lengthColumn);
+    color = (Rgb*) malloc (sizeof(Rgb)*lengthColumn);
 
-    fread(color, sizeof(RGB), lengthColumn, fp);
+    fread(color, sizeof(Rgb), lengthColumn, fp);
 }
 
 void skipPadding(FILE* fp, char count){
@@ -102,15 +102,15 @@ void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data){
 
     (*data).rowCount = bmif.biHeight;
     (*data).columnCount = bmif.biWidth;
-    (*data).pixel = (RGB**) malloc (bmif.biHeight*(sizeof(RGB*)));
+    (*data).pixel = (Rgb**) malloc (bmif.biHeight*(sizeof(Rgb*)));
 
     //Phan can cong voi chieu rong de la boi so cua 4
     char paddingCount = (4 - (bmif.biWidth) * ((int)bmif.biBitCount/8) % 4) % 4;
 
     fseek(fp, (long) bmhd.bfOffBits, SEEK_SET);
 
-    for (int i = 0; i < (bmif.biHeight); i++) {
-        scanBmpPixelLine(fp, data->pixel[bmif.biHeight - i - 1], bmif.biWidth);
+    for (int i = 0; i < (*data).rowCount; i++) {
+        scanBmpPixelLine(fp, data->pixel[(*data).rowCount - i - 1], (*data).columnCount);
         skipPadding(fp, paddingCount);
     }
 }
@@ -119,15 +119,19 @@ void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data){
 typedef struct Bitmap {
     BitMapHeader header;
     Dib bmif;
-    RGB color;
+    Rgb color;
     PixelArray pixel;
 } BitMap;
 
-void readFromFile(BitMap* bmp) {
+
+
+void readFromFile(BitMap* bmp){
     FILE* f = NULL;
     f = fopen("D:\\bitmap.in","r+b");
+
     if (!f)
         return;
+
     char* link = NULL;
     link = (char*) malloc (strlen(link)*sizeof(char));
     scanf("%s", link);
@@ -137,16 +141,49 @@ void readFromFile(BitMap* bmp) {
 
     //fread(&bmp->header, sizeof(struct BitMapHeader), 1, buffer);
 
-    readBmpFile(buffer, &bmp->header, &bmp->bmif, &bmp->color);
+    readBmpFile(buffer, &bmp->header, &bmp->bmif);
     readPixelArray(buffer, bmp->header, bmp->bmif, &bmp->pixel);
+
+    fclose(f);
+    fclose(buffer);
 }
 
-void drawBmp(BitMap* bmp1){
+void drawBmp(Dib bmif, PixelArray data) {
+    HWND console = GetConsoleWindow();
+    HDC hdc = GetDC(console);
 
-    BitMap* bmp2;
-    bmp2 = (BitMap*) malloc (sizeof(BitMap));
-    //Sau do tiep tuc tao ra 1 file BMP hien tren console theo yeu cau de bai:
+    //Co 2 cach de lay mau: 1) RGB(R, G, B) ; 2) RGB color; color.Red/color.Green/color.Blue
+
+    int input = 0;
+    char buffer[4];
     //Nhap vao 1 con so bat ky tu -100 den 100, chinh do sang toi cua anh:
+
+    do {
+        printf("Nhap vao so nguyen bat ky de chinh do sang toi (tu -100 -> 100) : ");
+        scanf("%s", buffer);
+        input = (int) strtol(buffer, NULL, 10);
+    } while ((input < -100) || (input) > 100);
+
+    for (int cot = 0; cot < bmif.biHeight; cot++)
+        for (int hang = 0; hang < bmif.biWidth; hang++)
+        {
+            //Ngoai ra con co ham data = GetPixel(cot, hang) co the tham khao de lay mau cua Pixel luu vao bien data
+            Rgb pixel = data.pixel[cot][hang];
+
+            //Mau trang co chi so la 255, 255, 255
+            SetPixel(hdc, cot, hang, RGB (pixel.Red + input, pixel.Green + input, pixel.Blue + input));
+        }
+
+    ReleaseDC(console, hdc);
+}
+
+void releaseBmpPixel(PixelArray* data){
+
+    for (int i = 0; i < data->rowCount; i++)
+    {
+        free(data->pixel[i]);
+    }
+    free(data->pixel);
 }
 
 int main() {
@@ -156,22 +193,11 @@ int main() {
 
     readFromFile(bmp1);
 
-    drawBmp(bmp1);
+    drawBmp(bmp1->bmif, bmp1->pixel);
 
-   /* FILE* fp2 = NULL;
-    fp2 = fopen("D:\\bitmap.out","w");
+    releaseBmpPixel(&bmp1->pixel);
 
-    if(!fp2){
-        printf("Open file 2 fail ...");
-        return
-    }
-    fclose(fp1);
-    fclose(fp2);
     getchar();
-
-    HWND console = GetConsoleWindow();
-    HDC hdc = GetDC(console);
-    */
 
     return
 }
