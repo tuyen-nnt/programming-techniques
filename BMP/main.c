@@ -9,7 +9,6 @@
 #pragma pack(1)
 
 
-
 typedef struct BitMapHeaders{
     char bfType[4];
     unsigned char bfSize[4];
@@ -46,6 +45,12 @@ typedef struct PixelArrays{
     uint32_t columnCount;
 } PixelArray;
 
+typedef struct Bitmap {
+    BitMapHeader header;
+    Dib bmif;
+    Rgb color;
+    PixelArray pixel;
+} BitMap;
 
 void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif) {
 
@@ -116,14 +121,6 @@ void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data){
 }
 
 
-typedef struct Bitmap {
-    BitMapHeader header;
-    Dib bmif;
-    Rgb color;
-    PixelArray pixel;
-} BitMap;
-
-
 
 void readFromFile(BitMap* bmp){
     FILE* f = NULL;
@@ -183,6 +180,7 @@ void releaseBmpPixel(PixelArray* data){
     {
         free(data->pixel[i]);
     }
+
     free(data->pixel);
 }
 
