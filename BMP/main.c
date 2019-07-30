@@ -170,19 +170,23 @@ int main() {
     //Khoi tao 1 file BMP de nhan du lieu file bmp ban dau tu link
     /*BitMap* bmp1;
     bmp1 = (BitMap*) malloc (sizeof(BitMap));*/
+    char *line_buf = NULL;
+    size_t line_buf_size = 0;
+    int line_count = 0;
+    ssize_t line_size;
 
     FILE* f = NULL;
     f = fopen("D:\\bitmap.in","r+b");
 
     if (!f)
-        return;
+        printf("Loi doc file bmp");
 
-    char* link = NULL;
-    link = (char*) malloc (strlen(link)*sizeof(char));
-    fscanf(f, "%s", getline(link));
+    line_size = getline(&line_buf, &line_buf_size, fp);
+
+    line_buf = (char*) malloc (line_buf_size*sizeof(char));
 
     FILE* buffer = NULL;
-    buffer = fopen(link, "r+b");
+    buffer = fopen(line_buf, "r+b");
 
     //KHoi tao 3 bien de ghi thong so Bmp cho file Bmp
     BitMapHeader* header;
