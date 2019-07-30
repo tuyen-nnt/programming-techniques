@@ -45,12 +45,12 @@ typedef struct PixelArrays{
     uint32_t columnCount;
 } PixelArray;
 
-typedef struct Bitmap {
+/*typedef struct Bitmap {
     BitMapHeader header;
     Dib bmif;
     Rgb color;
     PixelArray pixel;
-} BitMap;
+} BitMap; */
 
 void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif) {
 
@@ -75,7 +75,6 @@ void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif) {
         printf("Khong phai file bitmap");
     }
     else printf("Day la file bitmap");
-
 }
 
 void scanBmpPixelLine(FILE* fp, Rgb* color, uint32_t lengthColumn){
@@ -120,29 +119,14 @@ void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data){
     }
 }
 
-
-
-void readFromFile(BitMap* bmp){
-    FILE* f = NULL;
-    f = fopen("D:\\bitmap.in","r+b");
-
-    if (!f)
+void readFromFile(FILE* fp, BitMapHeader* header, Dib* bmif, PixelArray* data){
+    if (!fp)
         return;
 
-    char* link = NULL;
-    link = (char*) malloc (strlen(link)*sizeof(char));
-    scanf("%s", link);
+    readBmpFile(fp, &header, &bmif);
+    readPixelArray(fp, &header, &bmif, &data);
 
-    FILE* buffer = NULL;
-    buffer = fopen(link, "r+b");
-
-    //fread(&bmp->header, sizeof(struct BitMapHeader), 1, buffer);
-
-    readBmpFile(buffer, &bmp->header, &bmp->bmif);
-    readPixelArray(buffer, bmp->header, bmp->bmif, &bmp->pixel);
-
-    fclose(f);
-    fclose(buffer);
+    fclose(fp);
 }
 
 void drawBmp(Dib bmif, PixelArray data) {
@@ -170,7 +154,6 @@ void drawBmp(Dib bmif, PixelArray data) {
             //Mau trang co chi so la 255, 255, 255
             SetPixel(hdc, cot, hang, RGB (pixel.Red + input, pixel.Green + input, pixel.Blue + input));
         }
-
     ReleaseDC(console, hdc);
 }
 
@@ -180,21 +163,38 @@ void releaseBmpPixel(PixelArray* data){
     {
         free(data->pixel[i]);
     }
-
     free(data->pixel);
 }
 
 int main() {
     //Khoi tao 1 file BMP de nhan du lieu file bmp ban dau tu link
-    BitMap* bmp1;
-    bmp1 = (BitMap*) malloc (sizeof(BitMap));
+    /*BitMap* bmp1;
+    bmp1 = (BitMap*) malloc (sizeof(BitMap));*/
 
-    readFromFile(bmp1);
+    FILE* f = NULL;
+    f = fopen("D:\\bitmap.in","r+b");
 
-    drawBmp(bmp1->bmif, bmp1->pixel);
+    if (!f)
+        return;
 
-    releaseBmpPixel(&bmp1->pixel);
+    char* link = NULL;
+    link = (char*) malloc (strlen(link)*sizeof(char));
+    fscanf(f, "%s", getline(link));
 
+    FILE* buffer = NULL;
+    buffer = fopen(link, "r+b");
+
+    //KHoi tao 3 bien de ghi thong so Bmp cho file Bmp
+    BitMapHeader* header;
+    Dib* bmif;
+    PixelArray* data;
+
+    readFromFile(buffer);
+
+    drawBmp(bmif, data);
+
+    releaseBmpPixel(data);
+    fclose(buffer);
     getchar();
 
     return
