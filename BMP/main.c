@@ -159,7 +159,12 @@ void drawBmp(Dib bmif, PixelArray data) {
         printf("Nhap vao so nguyen bat ky de chinh do sang toi (tu -100 -> 100) : ");
         scanf("%s", buffer);
         input = (int) strtol(buffer, NULL, 10);
+
     } while ((input < -100) || (input) > 100);
+
+    int a = 0;
+    int b = 0;
+    int c = 0;
 
     for (int cot = 0; cot < bmif.biHeight; cot++)
         for (int hang = 0; hang < bmif.biWidth; hang++)
@@ -167,8 +172,37 @@ void drawBmp(Dib bmif, PixelArray data) {
             //Ngoai ra con co ham data = GetPixel(cot, hang) co the tham khao de lay mau cua Pixel luu vao bien data
             Rgb pixel = data.pixel[cot][hang];
 
+            if ((pixel.Red + input) > 255) {
+                a = 255;
+            } else
+                if ((pixel.Red + input) < 0) {
+                    a = 0;
+                } else {
+                    a = pixel.Red + input;
+                }
+
+            if ((pixel.Green + input) > 255) {
+                b = 255;
+            } else
+                if ((pixel.Green + input) < 0) {
+                    b = 0;
+                }
+                else {
+                    b = pixel.Green + input;
+                }
+
+            if ((pixel.Blue + input) > 255) {
+                c = 255;
+            } else
+                if ((pixel.Blue + input) < 0) {
+                    c = 0;
+                }  else {
+                    b = pixel.Blue + input;
+                }
+
+
             //Mau trang co chi so la 255, 255, 255
-            SetPixel(hdc, cot, hang, RGB (pixel.Red + input, pixel.Green + input, pixel.Blue + input));
+            SetPixel(hdc, cot, hang, RGB (a, b, c));
         }
 
     ReleaseDC(console, hdc);
