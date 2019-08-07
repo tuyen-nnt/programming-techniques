@@ -44,14 +44,7 @@ typedef struct PixelArrays{
     uint32_t columnCount;
 } PixelArray;
 
-typedef struct Bitmap {
-    BitMapHeader header;
-    Dib bmif;
-    Rgb color;
-    PixelArray pixel;
-} BitMap;
-
-void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif);
+void readBmpFile(FILE* fp, BitMapHeader* header, Dib* bmif)
 void scanBmpPixelLine(FILE* fp, Rgb* color, uint32_t lengthColumn);
 void skipPadding(FILE* fp, char count);
 void readPixelArray(FILE* fp, BitMapHeader bmhd, Dib bmif, PixelArray* data);
